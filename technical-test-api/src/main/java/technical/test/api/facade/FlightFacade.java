@@ -21,8 +21,20 @@ public class FlightFacade {
     private final FlightMapper flightMapper;
     private final AirportMapper airportMapper;
 
-    public Flux<FlightRepresentation> getAllFlights() {
+    public Flux<FlightRepresentation> getAllFlights(String origin, String destination, String sortPrice) {
         return flightService.getAllFlights()
+
+                .filter(f -> origin == null || f.getOrigin().equalsIgnoreCase(origin))
+
+                .filter(f -> destination == null || f.getDestination().equalsIgnoreCase(destination))
+
+                .sort((f1, f2) -> {
+                    if ("desc".equalsIgnoreCase(sortPrice)) {
+                        return Double.compare(f2.getPrice(), f1.getPrice());
+                    }
+                    return Double.compare(f1.getPrice(), f2.getPrice());
+                })
+
                 .flatMap(this::enrichFlight);
     }
 

@@ -14,8 +14,12 @@ public class FlightEndpoint {
     private final FlightFacade flightFacade;
 
     @GetMapping
-    public Flux<FlightRepresentation> getAllFlights() {
-        return flightFacade.getAllFlights();
+    public Flux<FlightRepresentation> getAllFlights(
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String destination,
+            @RequestParam(required = false, defaultValue = "asc") String sortPrice
+    ) {
+        return flightFacade.getAllFlights(origin, destination, sortPrice);
     }
 
     @PostMapping("/admin/flights")
