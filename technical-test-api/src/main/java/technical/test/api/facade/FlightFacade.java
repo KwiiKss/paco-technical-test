@@ -21,41 +21,24 @@ public class FlightFacade {
     private final FlightMapper flightMapper;
     private final AirportMapper airportMapper;
 
-    public Flux<FlightRepresentation> getAllFlights(String origin, String destination, String sortPrice) {
-        return flightService.getAllFlights()
-
-                .filter(f -> origin == null || f.getOrigin().equalsIgnoreCase(origin))
-
-                .filter(f -> destination == null || f.getDestination().equalsIgnoreCase(destination))
-
-                .sort((f1, f2) -> {
-                    if ("desc".equalsIgnoreCase(sortPrice)) {
-                        return Double.compare(f2.getPrice(), f1.getPrice());
-                    }
-                    return Double.compare(f1.getPrice(), f2.getPrice());
-                })
-
+    public Flux<FlightRepresentation> getAllFlights(String origin, String destination, String sortPrice, int page, int size) {
+        return flightService.getFlights(origin, destination, sortPrice, page, size)
                 .flatMap(this::enrichFlight);
     }
 
     public Mono<FlightRepresentation> createFlight(FlightRepresentation flightRepresentation) {
-
         FlightRecord flightRecord = flightMapper.convert(flightRepresentation);
-
         if (flightRecord.getId() == null) {
             flightRecord.setId(java.util.UUID.randomUUID());
         }
-
         return flightService.saveFlight(flightRecord)
                 .flatMap(this::enrichFlight);
     }
 
     private Mono<FlightRepresentation> enrichFlight(FlightRecord flightRecord) {
-
         return airportService.findByIataCode(flightRecord.getOrigin())
                 .zipWith(airportService.findByIataCode(flightRecord.getDestination()))
                 .map(tuple -> {
-
                     AirportRecord origin = tuple.getT1();
                     AirportRecord destination = tuple.getT2();
 
