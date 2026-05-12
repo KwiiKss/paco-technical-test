@@ -1,6 +1,11 @@
 spring:
   application:
     name: technical-test-renderer
+  data:
+    mongodb:
+      host: localhost
+      port: 28000
+      database: auchan-tech-test
 
 server:
   port: 8087
@@ -12,4 +17,3 @@ webclient:
       url: http://localhost:${webclient.api.technical.port}
       base-path: /
       flight-path: /flight
-

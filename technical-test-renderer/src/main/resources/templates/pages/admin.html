@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr" layout:decorate="~{decorators/master}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Création de vol</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f7fc;
+            color: #333;
+        }
+
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        section {
+            padding: 40px;
+        }
+
+        footer {
+            background-color: #3498db;
+            padding: 10px 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Admin - Créer un vol</h1>
+</header>
+<h2>Bienvenue sur la partie administration</h2>
+<p>Commencez à créer de nouveaux vols.</p>
+<section>
+    <form th:action="@{/admin}" th:object="${flightForm}" method="post">
+        <label>Origine IATA
+            <input type="text" th:field="*{origin}" placeholder="ex: CDG" required>
+        </label>
+
+        <label>Destination IATA
+            <input type="text" th:field="*{destination}" placeholder="ex: JFK" required>
+        </label>
+
+        <label>Date de départ
+            <input type="datetime-local" th:field="*{departure}" required>
+        </label>
+
+        <label>Date d'arrivée
+            <input type="datetime-local" th:field="*{arrival}" required>
+        </label>
+
+        <label>Prix
+            <input type="number" step="0.01" th:field="*{price}" placeholder="Prix" required>
+        </label>
+
+        <label>URL de l'image
+            <input type="text" th:field="*{image}" placeholder="https://..." required>
+        </label>
+
+        <button type="submit">Créer le vol</button>
+    </form>
+</section>
+
+<footer>
+    <p>&copy; 2023 Recherche de Vols. Tous droits réservés.</p>
+</footer>
+</body>
+</html>
