@@ -90,7 +90,12 @@
                 <th th:text="${flight.origin.name}"></th>
                 <th th:text="${flight.destination.name}"></th>
                 <th th:text="${#numbers.formatDecimal(flight.price, 1, 2)} + ' €'"></th>
-                <th th:text="${flight.image}"></th>
+                <td>
+                    <img th:src="${flight.image}"
+                         th:alt="Image"
+                         loading="lazy"
+                         width="300">
+                </td>
             </tr>
         </table>
     </ul>
