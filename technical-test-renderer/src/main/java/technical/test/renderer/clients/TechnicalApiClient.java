@@ -11,6 +11,8 @@ import technical.test.renderer.properties.TechnicalApiProperties;
 import technical.test.renderer.viewmodels.FlightForm;
 import technical.test.renderer.viewmodels.FlightViewModel;
 
+import java.util.Optional;
+
 @Component
 @Slf4j
 public class TechnicalApiClient {
@@ -20,13 +22,19 @@ public class TechnicalApiClient {
 
     public TechnicalApiClient(TechnicalApiProperties technicalApiProperties, final WebClient.Builder webClientBuilder) {
         this.technicalApiProperties = technicalApiProperties;
-        this.webClient = webClientBuilder.build();
+        this.webClient = webClientBuilder.baseUrl(technicalApiProperties.getUrl()).build();
     }
 
-    public Flux<FlightViewModel> getFlights() {
-        return webClient
-                .get()
-                .uri(technicalApiProperties.getUrl() + technicalApiProperties.getFlightPath())
+    public Flux<FlightViewModel> getFlights(String origin, String destination, String sortPrice, int page, int size) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/flight")
+                        .queryParamIfPresent("origin", Optional.ofNullable(origin).filter(s -> !s.isEmpty()))
+                        .queryParamIfPresent("destination", Optional.ofNullable(destination).filter(s -> !s.isEmpty()))
+                        .queryParam("sortPrice", sortPrice)
+                        .queryParam("page", page)
+                        .queryParam("size", size)
+                        .build())
                 .retrieve()
                 .bodyToFlux(FlightViewModel.class);
     }

@@ -15,8 +15,8 @@ public class FlightService {
         this.technicalApiClient = technicalApiClient;
     }
 
-    public Flux<FlightViewModel> getFlights() {
-        return this.technicalApiClient.getFlights();
+    public Flux<FlightViewModel> getFlights(String origin, String destination, String sortPrice, int page, int size) {
+        return this.technicalApiClient.getFlights(origin, destination, sortPrice, page, size);
     }
     public Mono<FlightViewModel> createFlight(FlightForm flightForm) {
         return this.technicalApiClient.createFlight(flightForm);
